@@ -1,20 +1,5 @@
-/*!
-
-=========================================================
-* Black Dashboard PRO React - v1.2.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/black-dashboard-pro-react
-* Copyright 2020 Creative Tim (https://www.creative-tim.com)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
+import { Route, Switch, Redirect, Link } from "react-router-dom";
 import classnames from "classnames";
 // reactstrap components
 import {
@@ -33,20 +18,55 @@ import {
   Col,
 } from "reactstrap";
 
+import { setAuthToken } from "./component/setAuthToken";
+import axios from "axios";
+
 const Login = () => {
   const [state, setState] = React.useState({});
+  const [showPassword, setShowPassword] = React.useState(false);
+  const [username, setUsername] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [message, setMessage] = React.useState("");
+
+  const handleLogin = async (event) => {
+    event.preventDefault();
+
+    const loginPayload = {
+      username: username,
+      password: password
+    }
+
+    axios.post("http://localhost:5000/api/auth/login", loginPayload)
+    .then(response => {
+        const token  =  response.data;
+        console.log(response);
+        localStorage.setItem("token", token);
+   
+        setAuthToken(token);
+  
+        //window.location.href = '/admin/dashboard'
+        return(response.data.message)
+   
+    })
+    .catch(err => console.log(err));
+    
+  };
+
+
   React.useEffect(() => {
     document.body.classList.toggle("login-page");
     return function cleanup() {
       document.body.classList.toggle("login-page");
     };
   });
+  const paragraph = <p style={{ color: 'red', textAlign: 'center' }}>{message}</p>;
+
   return (
     <>
       <div className="content">
         <Container>
           <Col className="ml-auto mr-auto" lg="4" md="6">
-            <Form className="form">
+            <Form className="form" onSubmit={handleLogin}>
               <Card className="card-login card-white">
                 <CardHeader>
                   <img
@@ -63,15 +83,15 @@ const Login = () => {
                   >
                     <InputGroupAddon addonType="prepend">
                       <InputGroupText>
-                        <i className="tim-icons icon-email-85" />
+                        <i className="tim-icons icon-single-02" />
                       </InputGroupText>
                     </InputGroupAddon>
                     <Input
-                      placeholder="Email"
+                      placeholder="Username"
                       type="text"
-                      onFocus={(e) => setState({ ...state, emailFocus: true })}
-                      onBlur={(e) => setState({ ...state, emailFocus: false })}
-                    />
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      />
                   </InputGroup>
                   <InputGroup
                     className={classnames({
@@ -85,48 +105,39 @@ const Login = () => {
                     </InputGroupAddon>
                     <Input
                       placeholder="Password"
-                      type="text"
-                      onFocus={(e) => setState({ ...state, passFocus: true })}
-                      onBlur={(e) => setState({ ...state, passFocus: false })}
+                      type={showPassword ? "text" : "password"}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      maxLength={8}
                     />
+                    <InputGroupText>
+                      <i className={`fa fa-${showPassword ? "eye-slash" : "eye"}`} onClick={() => setShowPassword(!showPassword)} />
+                    </InputGroupText>
                   </InputGroup>
                 </CardBody>
                 <CardFooter>
-                  <Button
+                  <Button type="submit"
                     block
                     className="mb-3"
                     color="primary"
-                    href="#pablo"
-                    onClick={(e) => e.preventDefault()}
                     size="lg"
                   >
-                    Get Started
+                    Login
                   </Button>
-                  <div className="pull-left">
-                    <h6>
-                      <a
-                        className="link footer-link"
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        Create Account
-                      </a>
-                    </h6>
-                  </div>
-                  <div className="pull-right">
-                    <h6>
-                      <a
-                        className="link footer-link"
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        Need Help?
-                      </a>
-                    </h6>
+                  <div align="center">
+
+                    <Link
+                      className="link footer-link"
+                      to="/auth/register"
+                    >
+                      Don't have an account? Create your account😉
+                    </Link>
+
                   </div>
                 </CardFooter>
               </Card>
             </Form>
+            {paragraph}
           </Col>
         </Container>
       </div>

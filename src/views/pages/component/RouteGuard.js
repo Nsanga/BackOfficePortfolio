@@ -18,7 +18,7 @@ const RouteGuard = ({ component: Component, ...rest }) => {
                hasJWT() ?
                    <Component {...props} />
                    :
-                   <Redirect from ="/" to={{ pathname: '/auth/login' }} />
+                   <Redirect to={{ pathname: '/auth/login' }} />
            )}
        />
    );

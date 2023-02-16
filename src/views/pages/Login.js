@@ -38,13 +38,14 @@ const Login = () => {
 
     axios.post("http://localhost:5000/api/auth/login", loginPayload)
     .then(response => {
-        const token  =  response.data;
+        const token  =  response.data.token;
         console.log(response);
         localStorage.setItem("token", token);
    
         setAuthToken(token);
+        setMessage(response.data.message)
+        window.location.href = "/admin/dashboard"
   
-        //window.location.href = '/admin/dashboard'
         return(response.data.message)
    
     })

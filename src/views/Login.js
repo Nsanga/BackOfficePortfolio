@@ -18,7 +18,7 @@ import {
   Col,
 } from "reactstrap";
 
-import { setAuthToken } from "./component/setAuthToken";
+import {setAuthToken} from "./components/setAuthToken";
 import axios from "axios";
 
 const Login = () => {
@@ -40,7 +40,10 @@ const Login = () => {
     .then(response => {
         const token  =  response.data.token;
         console.log(response);
-        localStorage.setItem("token", token);
+        if(response.data.status){
+          localStorage.setItem("token", token);
+        }
+        
    
         setAuthToken(token);
         setMessage(response.data.message)
@@ -125,16 +128,6 @@ const Login = () => {
                   >
                     Login
                   </Button>
-                  <div align="center">
-
-                    <Link
-                      className="link footer-link"
-                      to="/auth/register"
-                    >
-                      Don't have an account? Create your account😉
-                    </Link>
-
-                  </div>
                 </CardFooter>
               </Card>
             </Form>

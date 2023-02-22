@@ -2,39 +2,10 @@ import Dashboard from "views/Dashboard.js";
 import Accueil from "views/pages/Accueil.js";
 import CV from "views/pages/CV.js";
 import Realisation from "views/pages/Realisation.js";
-import Register from "views/pages/Register.js";
-import Login from "views/pages/Login.js";
+import Login from "views/Login";
 
 
 const routes = [
-
-  {
-    collapse: true,
-    name: "Pages",
-    rtlName: "صفحات",
-    icon: "tim-icons icon-image-02",
-    state: "pagesCollapse",
-    views: [
-      {
-        path: "/login",
-        name: "Login",
-        rtlName: "هعذاتسجيل الدخول",
-        mini: "L",
-        rtlMini: "هعذا",
-        component: Login,
-        layout: "/auth",
-      },
-      {
-        path: "/register",
-        name: "Register",
-        rtlName: "تسجيل",
-        mini: "R",
-        rtlMini: "صع",
-        component: Register,
-        layout: "/auth",
-      },
-    ],
-  },
 
   {
     path: "/dashboard",
@@ -80,6 +51,11 @@ const routes = [
       },
       
     ],
+  },
+  {
+    path: "/login",
+    component: Login,
+    layout: "/auth",
   },
   
 ];

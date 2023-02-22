@@ -1,21 +1,7 @@
-/*!
-
-=========================================================
-* Black Dashboard PRO React - v1.2.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/black-dashboard-pro-react
-* Copyright 2020 Creative Tim (https://www.creative-tim.com)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import ImageUpload from "components/CustomUpload/ImageUpload";
 import React from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 // reactstrap components
 import {
@@ -33,6 +19,38 @@ import {
 
 const AddService = () => {
     const [modalMini, setModalMini] = React.useState(false);
+    const [data, setData] = React.useState([])
+    const [nom, setNom] = React.useState("");
+    const [description, setDescription] = React.useState("");
+
+    useEffect(() => {
+      axios.get("http://localhost:5000/api/service/getAll")
+      .then(response => {
+        console.log("get List ::", response);
+        setData(response.data)
+   
+    })
+    .catch(err => console.log(err));
+    
+    }, [])
+  
+    const handleProfil = async (event) => {
+      event.preventDefault();
+  
+      const profilePayload = {
+        nom: nom,
+        description: description
+      }
+  
+      axios.post("http://localhost:5000/api/service/create", profilePayload)
+      .then(response => {
+          console.log("test",response);
+     
+      })
+      .catch(err => console.log(err));
+      
+    };
+
     const toggleModalMini = () => {
         setModalMini(!modalMini);
     };
@@ -104,9 +122,11 @@ const AddService = () => {
                     <Col sm="7">
                       <FormGroup className={requiredState}>
                         <Input
+                          value={nom}
+                          onChange={(e) => setNom(e.target.value)}
                           name="required"
                           type="text"
-                          onChange={(e) => change(e, "required", "length", 1)}
+                          //onChange={(e) => change(e, "required", "length", 1)}
                         />
                         {requiredState === "has-danger" ? (
                           <label className="error">
@@ -124,10 +144,12 @@ const AddService = () => {
                     <Col sm="7">
                       <FormGroup className={requiredState}>
                         <Input
+                          value={description}
+                          onChange={(e) => setDescription(e.target.value)}
                           name="required"
                           type="textarea"
                           placeholder="Description de la réalisation"
-                          onChange={(e) => change(e, "required", "length", 1)}
+                          //onChange={(e) => change(e, "required", "length", 1)}
                         />
                         {requiredState === "has-danger" ? (
                           <label className="error">
@@ -150,7 +172,7 @@ const AddService = () => {
                     </Col>
                   </Row>
                         <div>
-                            <Button color="primary" onClick={typeClick}>
+                            <Button color="primary" onClick={handleProfil}>
                                 Ajouter
                             </Button>
                             <Button

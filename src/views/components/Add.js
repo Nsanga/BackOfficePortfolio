@@ -1,20 +1,5 @@
-/*!
-
-=========================================================
-* Black Dashboard PRO React - v1.2.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/black-dashboard-pro-react
-* Copyright 2020 Creative Tim (https://www.creative-tim.com)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import ImageUpload from "components/CustomUpload/ImageUpload";
+import { useEffect } from "react";
 import React from "react";
 
 // reactstrap components
@@ -30,9 +15,44 @@ import {
     Input
 } from "reactstrap";
 //import ImageUpload from "components/CustomUpload/ImageUpload.js";
+import axios from "axios";
 
 const Add = () => {
     const [modalMini, setModalMini] = React.useState(false);
+    const [data, setData] = React.useState([])
+    const [nom, setNom] = React.useState("");
+    const [description, setDescription] = React.useState("");
+    const [type, setType] = React.useState("");
+
+    // useEffect(() => {
+    //   axios.get("http://localhost:5000/api/projet/getAll")
+    //   .then(response => {
+    //     console.log("get List ::", response);
+    //     setData(response.data)
+   
+    // })
+    // .catch(err => console.log(err));
+    
+    // }, [])
+  
+    const handleProfil = async (event) => {
+      event.preventDefault();
+  
+      const projetPayload = {
+        nom: nom,
+        description: description,
+        type: type
+      }
+  
+      axios.post("http://localhost:5000/api/projet/create", projetPayload)
+      .then(response => {
+          console.log("test",response);
+     
+      })
+      .catch(err => console.log(err));
+      
+    };
+
     const toggleModalMini = () => {
         setModalMini(!modalMini);
     };
@@ -106,7 +126,9 @@ const Add = () => {
                         <Input
                           name="required"
                           type="text"
-                          onChange={(e) => change(e, "required", "length", 1)}
+                          value={nom}
+                          onChange={(e) => setNom(e.target.value)}
+                          // onChange={(e) => change(e, "required", "length", 1)}
                         />
                         {requiredState === "has-danger" ? (
                           <label className="error">
@@ -124,10 +146,12 @@ const Add = () => {
                     <Col sm="7">
                       <FormGroup className={requiredState}>
                         <Input
+                          value={description}
+                          onChange={(e) => setDescription(e.target.value)}
                           name="required"
                           type="textarea"
                           placeholder="Entrer une description de la réalisation"
-                          onChange={(e) => change(e, "required", "length", 1)}
+                          // onChange={(e) => change(e, "required", "length", 1)}
                         />
                         {requiredState === "has-danger" ? (
                           <label className="error">
@@ -145,9 +169,11 @@ const Add = () => {
                     <Col sm="7">
                       <FormGroup className={requiredState}>
                         <Input
+                          value={type}
+                          onChange={(e) => setType(e.target.value)}
                           name="required"
                           type="text"
-                          onChange={(e) => change(e, "required", "length", 1)}
+                          //onChange={(e) => change(e, "required", "length", 1)}
                         />
                         {requiredState === "has-danger" ? (
                           <label className="error">
@@ -170,7 +196,7 @@ const Add = () => {
                     </Col>
                   </Row>
                         <div>
-                            <Button color="primary" onClick={typeClick}>
+                            <Button color="primary" onClick={handleProfil}>
                                 Ajouter
                             </Button>
                             <Button

@@ -2,7 +2,7 @@
 import React from "react";
 import classNames from "classnames";
 import { useState, useEffect } from "react";
-import {Data} from "../data/realisation.js"
+import { Data } from "../data/realisation.js";
 import {
   Card,
   CardBody,
@@ -13,12 +13,54 @@ import {
 } from "reactstrap";
 import Add from "views/components/Add";
 import ReactTable from "components/ReactTable/ReactTable.js";
+import axios from "axios";
 
 
 const Projets = () => {
   const [dataR, setDataR] = useState(Data.projet);
+  const [dataProject, setDataProject] = useState([])
+  
+
+  useEffect(() => {
+
+  }, [])
+
+  function transformDataProject(tableauObjets) {
+    // Créer un tableau vide pour stocker les tableaux de valeurs
+    const tableauValeurs = [];
+  
+    // Boucler à travers chaque objet du tableau d'objets
+    for (let objet of tableauObjets) {
+      // Créer un tableau vide pour stocker les valeurs de l'objet
+      const valeursObjet = [];
+  
+      // Boucler à travers chaque clé de l'objet
+      for (let cle in objet) {
+        // Ajouter la valeur correspondante au tableau de valeurs de l'objet
+        valeursObjet.push(objet[cle]);
+      }
+  
+      // Ajouter le tableau de valeurs de l'objet au tableau de tableaux
+      tableauValeurs.push(valeursObjet);
+    }
+    console.log ("test ::", tableauValeurs);
+
+    // Renvoyer le tableau de tableaux
+    return tableauValeurs;
+  }
+  
   const [data, setData] = React.useState(
     dataR?.map((prop, key) => {
+
+      axios.get("http://localhost:5000/api/projet/getAll")
+      .then(response => {
+        console.log("get List ::", response.data);
+        
+    transformDataProject(response.data.data);
+
+      })
+      .catch(err => console.log(err));
+
       return {
         id: key,
         nom: prop[0],
@@ -34,14 +76,14 @@ const Projets = () => {
                 let obj = data.find((o) => o.id === key);
                 alert(
                   "You've clicked LIKE button on \n{ \nName: " +
-                    obj.nom +
-                    ", \nimage: " +
-                    obj.image +
-                    ", \ndescription: " +
-                    obj.description +
-                    ", \ntype: " +
-                    obj.type +
-                    "\n}."
+                  obj.nom +
+                  ", \nimage: " +
+                  obj.image +
+                  ", \ndescription: " +
+                  obj.description +
+                  ", \ntype: " +
+                  obj.type +
+                  "\n}."
                 );
               }}
               color="info"
@@ -58,14 +100,14 @@ const Projets = () => {
                 let obj = data.find((o) => o.id === key);
                 alert(
                   "You've clicked EDIT button on \n{ \nNom: " +
-                    obj.nom +
-                    ", \nimage: " +
-                    obj.image +
-                    ", \ndescription: " +
-                    obj.description +
-                    ", \ntype: " +
-                    obj.type +
-                    "\n}."
+                  obj.nom +
+                  ", \nimage: " +
+                  obj.image +
+                  ", \ndescription: " +
+                  obj.description +
+                  ", \ntype: " +
+                  obj.type +
+                  "\n}."
                 );
               }}
               color="warning"
@@ -109,54 +151,54 @@ const Projets = () => {
     <>
       <div className="content">
 
-<Row>
-  <Col xs={12} md={12}>
-    <Card>
-      <CardHeader>
-            <h2 className="title">Projets</h2>
-      </CardHeader>
-      <CardBody>
-        
-        <Add></Add>
-          
-        <ReactTable
-          data={data}
-          filterable
-          resizable={false}
-          columns={[
-            {
-              Header: "Nom",
-              accessor: "nom",
-            },
-            {
-              Header: "Image",
-              accessor: "image",
-            },
-            {
-              Header: "Description",
-              accessor: "description",
-            },
-            {
-              Header: "Type",
-              accessor: "type",
-            },
-            {
-              Header: "Actions",
-              accessor: "actions",
-              sortable: false,
-              filterable: false,
-            },
-          ]}
-          defaultPageSize={10}
-          showPaginationTop
-          showPaginationBottom={false}
-          className="-striped -highlight"
-        />
-      </CardBody>
-    </Card>
-  </Col>
-</Row>
-</div>
+        <Row>
+          <Col xs={12} md={12}>
+            <Card>
+              <CardHeader>
+                <h2 className="title">Projets</h2>
+              </CardHeader>
+              <CardBody>
+
+                <Add></Add>
+
+                <ReactTable
+                  data={data}
+                  filterable
+                  resizable={false}
+                  columns={[
+                    {
+                      Header: "Nom",
+                      accessor: "nom",
+                    },
+                    {
+                      Header: "Image",
+                      accessor: "image",
+                    },
+                    {
+                      Header: "Description",
+                      accessor: "description",
+                    },
+                    {
+                      Header: "Type",
+                      accessor: "type",
+                    },
+                    {
+                      Header: "Actions",
+                      accessor: "actions",
+                      sortable: false,
+                      filterable: false,
+                    },
+                  ]}
+                  defaultPageSize={10}
+                  showPaginationTop
+                  showPaginationBottom={false}
+                  className="-striped -highlight"
+                />
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+      </div>
     </>
   );
 };

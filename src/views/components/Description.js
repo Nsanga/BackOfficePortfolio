@@ -1,5 +1,6 @@
 
 import React from "react";
+import { useState, useEffect } from "react";
 
 // reactstrap components
 import {
@@ -16,8 +17,43 @@ import {
 } from "reactstrap";
 import ImageUpload from "components/CustomUpload/ImageUpload.js";
 import { DataProfileCV } from "../data/realisation";
+import axios from "axios";
 
 const Description = () => {
+    const [data, setData] = React.useState([]);
+    const [nom, setNom] = React.useState("");
+    const [metier, setMetier] = React.useState("");
+    const [description, setDescription] = React.useState("");
+
+  useEffect(() => {
+    axios.get("http://localhost:5000/api/realisation/1")
+    .then(response => {
+      console.log("get List ::", response);
+      setData(response.data)
+ 
+  })
+  .catch(err => console.log(err));
+  
+  }, [])
+
+  const handleProfil = async (event) => {
+    event.preventDefault();
+
+    const RealisationPayload = {
+        nom:nom,
+        metier:metier,
+        description:description
+    }
+
+    axios.put("http://localhost:5000/api/realisation/1", RealisationPayload)
+    .then(response => {
+        console.log("test",response);
+   
+    })
+    .catch(err => console.log(err));
+    
+  };
+
     return (
         <>
             <div className="content">
@@ -31,7 +67,10 @@ const Description = () => {
                                 <Col md="12">
                                     <FormGroup>
                                         <label>Nom</label>
-                                        <Input value={DataProfileCV.nom} type="text" />
+                                        <Input 
+                                        value={nom}
+                                        onChange={(e) => setNom(e.target.value)}
+                                        type="text" />
                                     </FormGroup>
                                 </Col>
                                 </Row>
@@ -39,7 +78,10 @@ const Description = () => {
                                 <Col md="12">
                                     <FormGroup>
                                         <label>Metier</label>
-                                        <Input value={DataProfileCV.metier} type="text" />
+                                        <Input 
+                                        value={metier}
+                                        onChange={(e) => setMetier(e.target.value)} 
+                                        type="text" />
                                     </FormGroup>
                                 </Col>
                             </Row>
@@ -48,7 +90,8 @@ const Description = () => {
                                     <Col md="8">
                                         <label>Description</label>
                                         <Input
-                                            value={DataProfileCV.description}
+                                            vvalue={description}
+                                            onChange={(e) => setDescription(e.target.value)}
                                             cols="80"
                                             placeholder="Entrer votre description"
                                             type="textarea"
@@ -65,7 +108,7 @@ const Description = () => {
                         </Form>
                     </CardBody>
                     <CardFooter>
-                        <Button className="btn-fill" color="primary" type="submit">
+                        <Button className="btn-fill" color="primary" onClick={handleProfil}>
                             Enregistrer
                         </Button>
                     </CardFooter>

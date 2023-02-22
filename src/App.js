@@ -3,37 +3,35 @@ import { Router, Route, Switch, Redirect } from "react-router-dom";
 
 import AuthLayout from "layouts/Auth/Auth.js";
 import AdminLayout from "layouts/Admin/Admin.js";
-import RouteGuard from "views/pages/component/RouteGuard";
 import { history } from './helpers/history';
+import isAuth from 'helpers/isAuth';
+import { setAuthToken } from 'views/components/setAuthToken';
+
+
+  setAuthToken(localStorage.getItem("token"));
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  useEffect(() => {
-//check user has JWT token
-
-const token = localStorage.getItem("token");
- if (token) {
-    setIsAuthenticated(token);
- }
-
-  }, []);
 
   return (
     <Router history={history}>
-    <Switch>
-        <RouteGuard
-            exact
-            path="/admin/dashboard"
-            component={AdminLayout}
-        />
-        <RouteGuard
-               exact
-               path="/auth/login"
-               component={AuthLayout}
-        />
-        <Redirect to="/auth/login" />
+        {isAuth() ? (
+            <Switch>
+                <Route exact path="/admin/dashboard" render={(props) => <AdminLayout {...props} />} />
+                <Route exact path="/admin/accueil" render={(props) => <AdminLayout {...props} />} />
+                <Route exact path="/admin/realisation" render={(props) => <AdminLayout {...props} />} />
+                <Route exact path="/admin/cv" render={(props) => <AdminLayout {...props} />} />
+        
+                <Redirect from = "*" to="/admin/dashboard" />
+        
     </Switch>
+        ) : (
+            <Switch>
+                <Route exact path="/auth/login" render={(props) => <AuthLayout {...props} />} />
+                <Redirect to="/auth/login" />
+    </Switch>
+        )}
+    
 </Router>
   );
 }

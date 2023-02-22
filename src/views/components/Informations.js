@@ -1,20 +1,5 @@
-/*!
-
-=========================================================
-* Black Dashboard PRO React - v1.2.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/black-dashboard-pro-react
-* Copyright 2020 Creative Tim (https://www.creative-tim.com)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
+import { useEffect } from "react";
 
 // reactstrap components
 import {
@@ -31,9 +16,90 @@ import {
 } from "reactstrap";
 import { DataExperienceCV } from "../data/realisation";
 import { DataEducationCV } from "../data/realisation";
-
+import axios from "axios";
 
 const Informations = () => {
+
+    const [data, setData] = React.useState([]); 				
+    const [nomEx, setNomEx] = React.useState("");
+    const [poste, setPoste] = React.useState("");
+    const [anneeEx, setAnneeEx] = React.useState("");
+    const [tache, setTache] = React.useState("");
+    const [diplome, setDiplome] = React.useState("");
+    const [nomEd, setNomEd] = React.useState("");
+    const [anneeEd, setAnneeEd] = React.useState("");
+    const [nomRealisation, setNomRealisation] = React.useState("");
+    const [nomComptence, setNomComptence] = React.useState("");
+    const [descCompetence, setDescCompetence] = React.useState("");
+    const [nomLogiciel, setNomLogiciel] = React.useState("");
+
+
+  const handleInformation = async (event) => {
+    event.preventDefault();
+
+    const experiencePayload = {
+        nom:nomEx,
+        poste:poste,
+        annee:anneeEx,
+        tache:tache
+    }
+
+    const educationPayload = {
+        nom:nomEd,
+        diplome:diplome,
+        annee:anneeEd
+    }
+
+    const RealisationPayload = {
+        nom:nomRealisation
+    }
+
+    const CompetencePayload = {
+        nom:nomComptence,
+        description:descCompetence
+    }
+
+    const LogicielPayload = {
+        nom:nomLogiciel
+    }
+
+    axios.post("http://localhost:5000/api/experience/create", experiencePayload)
+    .then(response => {
+        console.log("test",response);
+   
+    })
+    .catch(err => console.log(err));
+
+    axios.post("http://localhost:5000/api/education/create", educationPayload)
+    .then(response => {
+        console.log("test",response);
+   
+    })
+    .catch(err => console.log(err));
+
+    axios.post("http://localhost:5000/api/realisation/create", RealisationPayload)
+    .then(response => {
+        console.log("test",response);
+   
+    })
+    .catch(err => console.log(err));
+
+    axios.post("http://localhost:5000/api/competence/create", CompetencePayload)
+    .then(response => {
+        console.log("test",response);
+   
+    })
+    .catch(err => console.log(err));
+
+    axios.post("http://localhost:5000/api/logiciel/create", LogicielPayload)
+    .then(response => {
+        console.log("test",response);
+   
+    })
+    .catch(err => console.log(err));
+    
+  };
+
     return (
         <>
             <div className="content">
@@ -47,7 +113,10 @@ const Informations = () => {
                                 <Col md="12">
                                     <FormGroup>
                                         <label>Nom</label>
-                                        <Input value={DataExperienceCV.nom} type="text" />
+                                        <Input 
+                                        value={nomEx}
+                                        onChange={(e) => setNomEx(e.target.value)} 
+                                        type="text" />
                                     </FormGroup>
                                 </Col>
                             </Row>
@@ -55,7 +124,10 @@ const Informations = () => {
                                 <Col md="12">
                                     <FormGroup>
                                         <label>Poste</label>
-                                        <Input value={DataExperienceCV.poste} type="text" />
+                                        <Input 
+                                        value={poste}
+                                        onChange={(e) => setPoste(e.target.value)} 
+                                        type="text" />
                                     </FormGroup>
                                 </Col>
                             </Row>
@@ -64,7 +136,9 @@ const Informations = () => {
                                     <FormGroup>
                                         <label>Année</label>
                                         <Input
-                                        value={DataExperienceCV.annee} type="text" />
+                                        value={anneeEx}
+                                        onChange={(e) => setAnneeEx(e.target.value)} 
+                                        type="text" />
                                     </FormGroup>
                                 </Col>
                             </Row>
@@ -73,7 +147,8 @@ const Informations = () => {
                                     <FormGroup>
                                         <label>Taches</label>
                                         <Input 
-                                        value={DataExperienceCV.tache}
+                                        value={tache}
+                                        onChange={(e) => setTache(e.target.value)}
                                         placeholder="Entrer vos taches"
                                         type="textarea" />
                                     </FormGroup>
@@ -92,7 +167,10 @@ const Informations = () => {
                                 <Col md="12">
                                     <FormGroup>
                                         <label>Nom</label>
-                                        <Input value={DataEducationCV.nom} type="text" />
+                                        <Input 
+                                        value={nomEd}
+                                        onChange={(e) => setNomEd(e.target.value)} 
+                                        type="text" />
                                     </FormGroup>
                                 </Col>
                             </Row>
@@ -101,7 +179,8 @@ const Informations = () => {
                                     <FormGroup>
                                         <label>Diplôme</label>
                                         <Input 
-                                            value={DataEducationCV.diplome}
+                                            value={diplome}
+                                            onChange={(e) => setDiplome(e.target.value)}
                                             placeholder="Entrer vos Diplômes"
                                             type="textarea" />
                                     </FormGroup>
@@ -112,7 +191,8 @@ const Informations = () => {
                                     <FormGroup>
                                         <label>Année</label>
                                         <Input
-                                            value={DataEducationCV.annee}
+                                            value={anneeEd}
+                                            onChange={(e) => setAnneeEd(e.target.value)}
                                             type="text"
                                         />
                                     </FormGroup>
@@ -131,7 +211,10 @@ const Informations = () => {
                                 <Col md="12">
                                     <FormGroup>
                                         <label>Nom</label>
-                                        <Input value={DataEducationCV.realisation} type="text" /> 
+                                        <Input 
+                                        value={nomRealisation}
+                                        onChange={(e) => setNomRealisation(e.target.value)} 
+                                        type="text" /> 
                                     </FormGroup>
                                 </Col>
                             </Row>
@@ -148,7 +231,21 @@ const Informations = () => {
                                 <Col md="12">
                                     <FormGroup>
                                         <label>Nom</label>
-                                        <Input value={DataEducationCV.competence} type="text" />
+                                        <Input 
+                                        value={nomComptence}
+                                        onChange={(e) => setNomComptence(e.target.value)}  
+                                        type="text" />
+                                    </FormGroup>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col md="12">
+                                    <FormGroup>
+                                        <label>Description</label>
+                                        <Input 
+                                        value={descCompetence}
+                                        onChange={(e) => setDescCompetence(e.target.value)}  
+                                        type="text" />
                                     </FormGroup>
                                 </Col>
                             </Row>
@@ -164,14 +261,17 @@ const Informations = () => {
                                 <Col md="12">
                                     <FormGroup>
                                         <label>Nom</label>
-                                        <Input value={DataEducationCV.logiciel} type="text" />
+                                        <Input 
+                                        value={nomLogiciel}
+                                        onChange={(e) => setNomLogiciel(e.target.value)}  
+                                        type="text" />
                                     </FormGroup>
                                 </Col>
                             </Row>
                         </Form>
                     </CardBody>
                     <CardFooter>
-                        <Button className="btn-fill" color="primary" type="submit">
+                        <Button className="btn-fill" color="primary" onClick={handleInformation}>
                             Enregistrer
                         </Button>
                     </CardFooter>

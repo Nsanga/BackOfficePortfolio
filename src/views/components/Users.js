@@ -1,19 +1,3 @@
-/*!
-
-=========================================================
-* Black Dashboard PRO React - v1.2.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/black-dashboard-pro-react
-* Copyright 2020 Creative Tim (https://www.creative-tim.com)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
 import { useState, useEffect } from "react";
 
@@ -31,9 +15,39 @@ import {
 } from "reactstrap";
 import ImageUpload from "components/CustomUpload/ImageUpload.js";
 import {Data} from "../data/realisation.js"
+import axios from "axios";
 
 
 const Users = () => {
+  const [data, setData] = React.useState([]);
+  const [descRealisation, setDescRealisation] = React.useState("");
+
+  useEffect(() => {
+    axios.get("http://localhost:5000/api/auth/profile")
+    .then(response => {
+      console.log("get List ::", response);
+      setData(response.data)
+ 
+  })
+  .catch(err => console.log(err));
+  
+  }, [])
+
+  const handleProfil = async (event) => {
+    event.preventDefault();
+
+    const profilePayload = {
+      desc_realisation : descRealisation
+    }
+
+    axios.put("http://localhost:5000/api/auth/update/1", profilePayload)
+    .then(response => {
+        console.log("test",response);
+   
+    })
+    .catch(err => console.log(err));
+    
+  };
     
   return (
     <>
@@ -56,7 +70,8 @@ const Users = () => {
                     <Col md="8">
                     <label>Description</label>
                     <Input
-                      value={Data.description}
+                      value={descRealisation}
+                      onChange={(e) => setDescRealisation(e.target.value)}
                       cols="80"
                       placeholder="Entrer votre description"
                       type="textarea"
@@ -66,7 +81,7 @@ const Users = () => {
                   </FormGroup>
             </CardBody>
               <CardFooter>
-                <Button className="btn-fill" color="primary" type="submit">
+                <Button className="btn-fill" color="primary" onClick={handleProfil}>
                   Enregistrer
                 </Button>
               </CardFooter>

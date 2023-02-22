@@ -1,19 +1,3 @@
-/*!
-
-=========================================================
-* Black Dashboard PRO React - v1.2.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/black-dashboard-pro-react
-* Copyright 2020 Creative Tim (https://www.creative-tim.com)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
 import { useState, useEffect } from "react";
 
@@ -31,9 +15,45 @@ import {
   Col,
 } from "reactstrap";
 import ImageUpload from "components/CustomUpload/ImageUpload.js";
-import {DataProfile, DataAbout} from "../data/realisation.js"
+import axios from "axios";
 
 const User = () => {
+  const [data, setData] = React.useState([]);
+  const [nom, setNom] = React.useState("");
+  const [metier, setMetier] = React.useState("");
+  const [description, setDescription] = React.useState("");
+  const [about_description, setAboutDescription] = React.useState("");
+
+  useEffect(() => {
+    axios.get("http://localhost:5000/api/auth/profile")
+    .then(response => {
+      console.log("get List ::", response);
+      setData(response.data)
+ 
+  })
+  .catch(err => console.log(err));
+  
+  }, [])
+
+  const handleProfil = async (event) => {
+    event.preventDefault();
+
+    const profilePayload = {
+      nom: nom,
+      metier: metier,
+      description: description,
+      about_description: about_description
+    }
+
+    axios.put("http://localhost:5000/api/auth/update/1", profilePayload)
+    .then(response => {
+        console.log("test",response);
+   
+    })
+    .catch(err => console.log(err));
+    
+  };
+
   return (
     <>
       <div className="content">
@@ -42,18 +62,22 @@ const User = () => {
                 <h2 className="title">Profile</h2>
               </CardHeader>
               <CardBody>
-                <Form>
+                <Form >
                   <Row>
                     <Col className="pr-md-1" md="6">
                       <FormGroup>
                         <label>Nom</label>
-                        <Input type="text" value={DataProfile.nom}/>
+                        <Input type="text" 
+                        value={nom}
+                        onChange={(e) => setNom(e.target.value)}/>
                       </FormGroup>
                     </Col>
                     <Col className="pl-md-1" md="6">
                       <FormGroup>
                         <label>Metier</label>
-                        <Input type="text" value={DataProfile.metier}/>
+                        <Input type="text" 
+                        value={metier}
+                        onChange={(e) => setMetier(e.target.value)}/>
                       </FormGroup>
                     </Col>
                   </Row>
@@ -64,7 +88,8 @@ const User = () => {
                         <Input
                           placeholder="Decrivez-vous"
                           type="textarea"
-                          value={DataProfile.description}
+                          value={description}
+                          onChange={(e) => setDescription(e.target.value)}
                         />
                       </FormGroup>
                     </Col>
@@ -95,7 +120,8 @@ const User = () => {
                     <Col md="8">
                     <label>Description</label>
                     <Input
-                    value={DataAbout.description}
+                      value={about_description}
+                      onChange={(e) => setAboutDescription(e.target.value)}
                       cols="80"
                       placeholder="Entrer votre description"
                       type="textarea"
@@ -105,7 +131,7 @@ const User = () => {
                   </FormGroup>
             </CardBody>
               <CardFooter>
-                <Button className="btn-fill" color="primary" type="submit">
+                <Button onClick={handleProfil} className="btn-fill" color="primary" >
                   Enregistrer
                 </Button>
               </CardFooter>

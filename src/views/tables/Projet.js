@@ -67,6 +67,9 @@ const Projets = () => {
         image: prop[1],
         description: prop[2],
         type: prop[3],
+        action1:prop[4],
+        action2:prop[5],
+        action3:prop[6],
         actions: (
           // we've added some custom button actions
           <div className="actions-right">
@@ -181,6 +184,18 @@ const Projets = () => {
                     {
                       Header: "Type",
                       accessor: "type",
+                    },
+                    {
+                      Header: "Action1",
+                      accessor: "action1"
+                    },
+                    {
+                      Header: "Action2",
+                      accessor: "action2"
+                    },
+                    {
+                      Header: "Action3",
+                      accessor: "action3"
                     },
                     {
                       Header: "Actions",

@@ -21,11 +21,7 @@ const Projets = () => {
   const [dataProject, setDataProject] = useState([])
   
 
-  useEffect(() => {
-
-  }, [])
-
-  function transformDataProject(tableauObjets) {
+  const  transformDataProject = (tableauObjets) => {
     // Créer un tableau vide pour stocker les tableaux de valeurs
     const tableauValeurs = [];
   
@@ -42,24 +38,32 @@ const Projets = () => {
   
       // Ajouter le tableau de valeurs de l'objet au tableau de tableaux
       tableauValeurs.push(valeursObjet);
+      setDataProject(val => [...val,valeursObjet]);
+
     }
     console.log ("test ::", tableauValeurs);
+
 
     // Renvoyer le tableau de tableaux
     return tableauValeurs;
   }
-  
+
+ 
+
+  useEffect(() => {
+    async function getListProject() {
+      const response = await axios.get("http://localhost:5000/api/projet/getAll")
+      console.log("get List ::", response.data.data);
+      const newData = transformDataProject(response.data.data);
+       setDataProject(newData);
+      return newData;
+    }
+ getListProject();
+ console.log("rland;",dataProject)
+  }, [])
+
   const [data, setData] = React.useState(
-    dataR?.map((prop, key) => {
-
-      axios.get("http://localhost:5000/api/projet/getAll")
-      .then(response => {
-        console.log("get List ::", response.data);
-        
-    transformDataProject(response.data.data);
-
-      })
-      .catch(err => console.log(err));
+    dataProject?.map((prop, key) => {
 
       return {
         id: key,
@@ -74,30 +78,6 @@ const Projets = () => {
           // we've added some custom button actions
           <div className="actions-right">
             {/* use this button to add a like kind of action */}
-            <Button
-              onClick={() => {
-                let obj = data.find((o) => o.id === key);
-                alert(
-                  "You've clicked LIKE button on \n{ \nName: " +
-                  obj.nom +
-                  ", \nimage: " +
-                  obj.image +
-                  ", \ndescription: " +
-                  obj.description +
-                  ", \ntype: " +
-                  obj.type +
-                  "\n}."
-                );
-              }}
-              color="info"
-              size="sm"
-              className={classNames("btn-icon btn-link like", {
-                "btn-neutral": key < 5,
-              })}
-            >
-              <i className="tim-icons icon-heart-2" />
-            </Button>{" "}
-            {/* use this button to add a edit kind of action */}
             <Button
               onClick={() => {
                 let obj = data.find((o) => o.id === key);

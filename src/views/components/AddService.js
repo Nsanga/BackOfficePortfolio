@@ -39,7 +39,8 @@ const AddService = () => {
   
       const profilePayload = {
         nom: nom,
-        description: description
+        description: description,
+        id_User: await localStorage.getItem("id user")
       }
   
       axios.post("http://localhost:5000/api/service/create", profilePayload)

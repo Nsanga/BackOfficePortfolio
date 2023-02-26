@@ -20,6 +20,7 @@ const Projets = () => {
   const [dataR, setDataR] = useState(Data.projet);
   const [dataProject, setDataProject] = useState([])
   
+  
 
   const  transformDataProject = (tableauObjets) => {
     // Créer un tableau vide pour stocker les tableaux de valeurs
@@ -53,7 +54,7 @@ const Projets = () => {
   useEffect(() => {
     async function getListProject() {
       const response = await axios.get("http://localhost:5000/api/projet/getAll")
-      console.log("get List ::", response.data.data);
+      console.log("get List2 ::", response.data.data);
       const newData = transformDataProject(response.data.data);
        setDataProject(newData);
       return newData;

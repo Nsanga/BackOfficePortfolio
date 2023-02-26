@@ -25,7 +25,9 @@ const Users = () => {
   useEffect(() => {
     axios.get("http://localhost:5000/api/auth/profile")
     .then(response => {
-      console.log("get List ::", response);
+      const user = response.data.data.id_User
+      console.log("get List1 ::", response);
+      localStorage.setItem("id user", user);
       setData(response.data)
  
   })

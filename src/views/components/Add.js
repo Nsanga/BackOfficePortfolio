@@ -23,6 +23,7 @@ const Add = () => {
     const [nom, setNom] = React.useState("");
     const [description, setDescription] = React.useState("");
     const [type, setType] = React.useState("");
+    
 
     // useEffect(() => {
     //   axios.get("http://localhost:5000/api/projet/getAll")
@@ -41,7 +42,9 @@ const Add = () => {
       const projetPayload = {
         nom: nom,
         description: description,
-        type: type
+        type: type,
+        id_User: await localStorage.getItem("id user")
+
       }
   
       axios.post("http://localhost:5000/api/projet/create", projetPayload)

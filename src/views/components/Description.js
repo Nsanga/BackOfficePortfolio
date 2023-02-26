@@ -42,7 +42,8 @@ const Description = () => {
     const RealisationPayload = {
         nom:nom,
         metier:metier,
-        description:description
+        description:description,
+        id_User: await localStorage.getItem("id user")
     }
 
     axios.put("http://localhost:5000/api/realisation/1", RealisationPayload)

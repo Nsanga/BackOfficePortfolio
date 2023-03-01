@@ -1,8 +1,6 @@
-
 import React from "react";
 import classNames from "classnames";
 import { useState, useEffect } from "react";
-import { Data } from "../data/realisation.js";
 import {
   Card,
   CardBody,
@@ -12,69 +10,51 @@ import {
   Button,
 } from "reactstrap";
 import Add from "views/components/Add";
-import ReactTable from "components/ReactTable/ReactTable.js";
+import ProjectTable from "components/ReactTable/ProjectTable.js";
 import axios from "axios";
+import { Data } from "../data/realisation.js";
 
 
 const Projets = () => {
   const [dataR, setDataR] = useState(Data.projet);
-  const [dataProject, setDataProject] = useState([])
-  
-  
+  const [dataProject, setDataProject] = useState([[]]);
 
-  const  transformDataProject = (tableauObjets) => {
-    // Créer un tableau vide pour stocker les tableaux de valeurs
+  const transformDataProject = (tableauObjets) => {
     const tableauValeurs = [];
-  
-    // Boucler à travers chaque objet du tableau d'objets
     for (let objet of tableauObjets) {
-      // Créer un tableau vide pour stocker les valeurs de l'objet
       const valeursObjet = [];
-  
-      // Boucler à travers chaque clé de l'objet
       for (let cle in objet) {
-        // Ajouter la valeur correspondante au tableau de valeurs de l'objet
         valeursObjet.push(objet[cle]);
       }
-  
-      // Ajouter le tableau de valeurs de l'objet au tableau de tableaux
       tableauValeurs.push(valeursObjet);
-      setDataProject(val => [...val,valeursObjet]);
-
     }
-    console.log ("test ::", tableauValeurs);
-
-
-    // Renvoyer le tableau de tableaux
+    setDataProject(tableauValeurs);
     return tableauValeurs;
   }
 
- 
+  useEffect(async () => {
+    const newData = await getListProject();
+    await  setDataProject([...dataProject, newData]);
 
-  useEffect(() => {
-    async function getListProject() {
-      const response = await axios.get("http://localhost:5000/api/projet/getAll")
-      console.log("get List2 ::", response.data.data);
-      const newData = transformDataProject(response.data.data);
-       setDataProject(newData);
-      return newData;
-    }
- getListProject();
- console.log("rland;",dataProject)
-  }, [])
+    console.log("newData:", dataProject);
+    console.log("newData: 22",dataR)
+
+  }, []);
+
+  const getListProject = async () => {
+    const response = await axios.get("http://localhost:5000/api/projet/getAll")
+    const newData = transformDataProject(response.data.data);
+    return newData;
+  }
 
   const [data, setData] = React.useState(
-    dataProject?.map((prop, key) => {
-
+    dataR?.map((prop, key) => {
       return {
         id: key,
         nom: prop[0],
         image: prop[1],
         description: prop[2],
         type: prop[3],
-        action1:prop[4],
-        action2:prop[5],
-        action3:prop[6],
         actions: (
           // we've added some custom button actions
           <div className="actions-right">
@@ -145,7 +125,7 @@ const Projets = () => {
 
                 <Add></Add>
 
-                <ReactTable
+                <ProjectTable
                   data={data}
                   filterable
                   resizable={false}

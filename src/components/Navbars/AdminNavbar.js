@@ -136,7 +136,7 @@ const AdminNavbar = (props) => {
                   <div className="photo">
                     <img
                       alt="..."
-                      src={require("assets/img/mike.jpg").default}
+                      src={require("assets/img/profil.PNG").default}
                     />
                   </div>
                   <b className="caret d-none d-lg-block d-xl-block" />

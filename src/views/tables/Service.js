@@ -10,7 +10,7 @@ import {
   Button,
 } from "reactstrap";
 
-import ReactTable from "components/ReactTable/ReactTable.js";
+import ServiceTable from "components/ReactTable/ServiceTable.js";
 import AddService from "views/components/AddService";
 import {DataAbout} from "../data/realisation.js"
 
@@ -18,7 +18,7 @@ const dataTable = [
   
 ];
 
-const ReactTables = () => {
+const Service = () => {
   const [dataR, setDataR] = useState(DataAbout.service);
   const [data, setData] = React.useState(
     dataR?.map((prop, key) => {
@@ -115,7 +115,7 @@ const ReactTables = () => {
               </CardHeader>
               <CardBody>
                 <AddService></AddService>
-                <ReactTable
+                <ServiceTable
                   data={data}
                   filterable
                   resizable={false}
@@ -153,4 +153,4 @@ const ReactTables = () => {
   );
 };
 
-export default ReactTables;
+export default Service;

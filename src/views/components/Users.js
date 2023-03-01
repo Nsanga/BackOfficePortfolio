@@ -26,7 +26,7 @@ const Users = () => {
     axios.get("http://localhost:5000/api/auth/profile")
     .then(response => {
       const user = response.data.data.id_User
-      console.log("get List1 ::", response);
+      console.log("get List ::", response);
       localStorage.setItem("id user", user);
       setData(response.data)
  

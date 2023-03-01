@@ -11,7 +11,7 @@ import {
   Row,
   Col,
 } from "reactstrap";
-import ReactTables from "views/tables/ReactTables";
+import Service from "views/tables/Service";
 import User from "./User";
 
 const Accueil = () => {
@@ -70,7 +70,7 @@ const Accueil = () => {
                         <User></User>
                       </TabPane>
                       <TabPane tabId="services">
-                        <ReactTables></ReactTables>
+                        <Service></Service>
                       </TabPane>
                     </TabContent>
                   </Col>

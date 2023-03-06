@@ -29,7 +29,10 @@ const Description = () => {
     axios.get("http://localhost:5000/api/realisation/1")
     .then(response => {
       console.log("get List ::", response);
-      setData(response.data)
+      setData(response.data.data);
+      setNom(response.data.data.nom);
+      setMetier(response.data.data.metier);
+      setDescription(response.data.data.description);
  
   })
   .catch(err => console.log(err));
@@ -91,7 +94,7 @@ const Description = () => {
                                     <Col md="8">
                                         <label>Description</label>
                                         <Input
-                                            vvalue={description}
+                                            value={description}
                                             onChange={(e) => setDescription(e.target.value)}
                                             cols="80"
                                             placeholder="Entrer votre description"

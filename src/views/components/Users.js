@@ -28,7 +28,8 @@ const Users = () => {
       const user = response.data.data.id_User
       console.log("get List ::", response);
       localStorage.setItem("id user", user);
-      setData(response.data)
+      setData(response.data.data)
+      setDescRealisation(response.data.data.desc_realisation)
  
   })
   .catch(err => console.log(err));

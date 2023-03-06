@@ -20,7 +20,7 @@ import axios from "axios";
 
 const Informations = () => {
 
-    const [data, setData] = React.useState([]); 				
+    const [data, setData] = React.useState([]);
     const [nomEx, setNomEx] = React.useState("");
     const [poste, setPoste] = React.useState("");
     const [anneeEx, setAnneeEx] = React.useState("");
@@ -33,72 +33,89 @@ const Informations = () => {
     const [descCompetence, setDescCompetence] = React.useState("");
     const [nomLogiciel, setNomLogiciel] = React.useState("");
 
-
-  const handleInformation = async (event) => {
-    event.preventDefault();
-
-    const experiencePayload = {
-        nom:nomEx,
-        poste:poste,
-        annee:anneeEx,
-        tache:tache
+    function handleInputChange(event) {
+        setTache(event.target.value);
     }
 
-    const educationPayload = {
-        nom:nomEd,
-        diplome:diplome,
-        annee:anneeEd
-    }
+    const handleInformation = async (event) => {
+        event.preventDefault();
 
-    const RealisationPayload = {
-        nom:nomRealisation
-    }
+        const values = tache.split('\n').map(value => value.trim());
+        console.log(values);
 
-    const CompetencePayload = {
-        nom:nomComptence,
-        description:descCompetence
-    }
+        const experiencePayload = {
+            nom: nomEx,
+            poste: poste,
+            annee: anneeEx,
+            tache: tache
+        }
 
-    const LogicielPayload = {
-        nom:nomLogiciel
-    }
+        const educationPayload = {
+            nom: nomEd,
+            diplome: diplome,
+            annee: anneeEd
+        }
 
-    axios.post("http://localhost:5000/api/experience/create", experiencePayload)
-    .then(response => {
-        console.log("test",response);
-   
-    })
-    .catch(err => console.log(err));
+        const RealisationPayload = {
+            nom: nomRealisation
+        }
 
-    axios.post("http://localhost:5000/api/education/create", educationPayload)
-    .then(response => {
-        console.log("test",response);
-   
-    })
-    .catch(err => console.log(err));
+        const CompetencePayload = {
+            nom: nomComptence,
+            description: descCompetence
+        }
 
-    axios.post("http://localhost:5000/api/realisation/create", RealisationPayload)
-    .then(response => {
-        console.log("test",response);
-   
-    })
-    .catch(err => console.log(err));
+        const LogicielPayload = {
+            nom: nomLogiciel
+        }
 
-    axios.post("http://localhost:5000/api/competence/create", CompetencePayload)
-    .then(response => {
-        console.log("test",response);
-   
-    })
-    .catch(err => console.log(err));
+        if(experiencePayload.nom != "" || experiencePayload.poste != "" || experiencePayload.annee != "" || experiencePayload.tache != "")
+        {
+            axios.post("http://localhost:5000/api/experience/create", experiencePayload)
+                .then(response => {
+                    console.log("test", response);
 
-    axios.post("http://localhost:5000/api/logiciel/create", LogicielPayload)
-    .then(response => {
-        console.log("test",response);
-   
-    })
-    .catch(err => console.log(err));
-    
-  };
+                })
+                .catch(err => console.log(err));
+        }
+
+        if (educationPayload.nom != "" || educationPayload.annee != "" || educationPayload.diplome != "") {
+            axios.post("http://localhost:5000/api/education/create", educationPayload)
+                .then(response => {
+                    console.log("test", response);
+
+                })
+                .catch(err => console.log(err));
+        }
+
+        if (RealisationPayload.nom != "") {
+            axios.post("http://localhost:5000/api/realisation/create", RealisationPayload)
+                .then(response => {
+                    console.log("test", response);
+
+                })
+                .catch(err => console.log(err));
+        }
+
+        if (CompetencePayload.nom != "" || CompetencePayload.description != "") {
+            axios.post("http://localhost:5000/api/competence/create", CompetencePayload)
+                .then(response => {
+                    console.log("test", response);
+
+                })
+                .catch(err => console.log(err));
+        }
+
+        if (LogicielPayload.nom != "") {
+            axios.post("http://localhost:5000/api/logiciel/create", LogicielPayload)
+                .then(response => {
+                    console.log("test", response);
+
+                })
+                .catch(err => console.log(err));
+        }
+
+    };
 
     return (
         <>
@@ -113,10 +130,10 @@ const Informations = () => {
                                 <Col md="12">
                                     <FormGroup>
                                         <label>Nom</label>
-                                        <Input 
-                                        value={nomEx}
-                                        onChange={(e) => setNomEx(e.target.value)} 
-                                        type="text" />
+                                        <Input
+                                            value={nomEx}
+                                            onChange={(e) => setNomEx(e.target.value)}
+                                            type="text" />
                                     </FormGroup>
                                 </Col>
                             </Row>
@@ -124,10 +141,10 @@ const Informations = () => {
                                 <Col md="12">
                                     <FormGroup>
                                         <label>Poste</label>
-                                        <Input 
-                                        value={poste}
-                                        onChange={(e) => setPoste(e.target.value)} 
-                                        type="text" />
+                                        <Input
+                                            value={poste}
+                                            onChange={(e) => setPoste(e.target.value)}
+                                            type="text" />
                                     </FormGroup>
                                 </Col>
                             </Row>
@@ -136,9 +153,9 @@ const Informations = () => {
                                     <FormGroup>
                                         <label>Année</label>
                                         <Input
-                                        value={anneeEx}
-                                        onChange={(e) => setAnneeEx(e.target.value)} 
-                                        type="text" />
+                                            value={anneeEx}
+                                            onChange={(e) => setAnneeEx(e.target.value)}
+                                            type="text" />
                                     </FormGroup>
                                 </Col>
                             </Row>
@@ -146,11 +163,13 @@ const Informations = () => {
                                 <Col md="12">
                                     <FormGroup>
                                         <label>Taches</label>
-                                        <Input 
-                                        value={tache}
-                                        onChange={(e) => setTache(e.target.value)}
-                                        placeholder="Entrer vos taches"
-                                        type="textarea" />
+
+                                        <Input
+                                            id="multiLineInput"
+                                            value={tache}
+                                            onChange={handleInputChange}
+                                            placeholder="Entrer vos taches"
+                                            type="textarea" />
                                     </FormGroup>
                                 </Col>
                             </Row>
@@ -167,10 +186,10 @@ const Informations = () => {
                                 <Col md="12">
                                     <FormGroup>
                                         <label>Nom</label>
-                                        <Input 
-                                        value={nomEd}
-                                        onChange={(e) => setNomEd(e.target.value)} 
-                                        type="text" />
+                                        <Input
+                                            value={nomEd}
+                                            onChange={(e) => setNomEd(e.target.value)}
+                                            type="text" />
                                     </FormGroup>
                                 </Col>
                             </Row>
@@ -178,7 +197,7 @@ const Informations = () => {
                                 <Col md="12">
                                     <FormGroup>
                                         <label>Diplôme</label>
-                                        <Input 
+                                        <Input
                                             value={diplome}
                                             onChange={(e) => setDiplome(e.target.value)}
                                             placeholder="Entrer vos Diplômes"
@@ -211,10 +230,10 @@ const Informations = () => {
                                 <Col md="12">
                                     <FormGroup>
                                         <label>Nom</label>
-                                        <Input 
-                                        value={nomRealisation}
-                                        onChange={(e) => setNomRealisation(e.target.value)} 
-                                        type="text" /> 
+                                        <Input
+                                            value={nomRealisation}
+                                            onChange={(e) => setNomRealisation(e.target.value)}
+                                            type="text" />
                                     </FormGroup>
                                 </Col>
                             </Row>
@@ -231,10 +250,10 @@ const Informations = () => {
                                 <Col md="12">
                                     <FormGroup>
                                         <label>Nom</label>
-                                        <Input 
-                                        value={nomComptence}
-                                        onChange={(e) => setNomComptence(e.target.value)}  
-                                        type="text" />
+                                        <Input
+                                            value={nomComptence}
+                                            onChange={(e) => setNomComptence(e.target.value)}
+                                            type="text" />
                                     </FormGroup>
                                 </Col>
                             </Row>
@@ -242,10 +261,10 @@ const Informations = () => {
                                 <Col md="12">
                                     <FormGroup>
                                         <label>Description</label>
-                                        <Input 
-                                        value={descCompetence}
-                                        onChange={(e) => setDescCompetence(e.target.value)}  
-                                        type="text" />
+                                        <Input
+                                            value={descCompetence}
+                                            onChange={(e) => setDescCompetence(e.target.value)}
+                                            type="text" />
                                     </FormGroup>
                                 </Col>
                             </Row>
@@ -261,10 +280,10 @@ const Informations = () => {
                                 <Col md="12">
                                     <FormGroup>
                                         <label>Nom</label>
-                                        <Input 
-                                        value={nomLogiciel}
-                                        onChange={(e) => setNomLogiciel(e.target.value)}  
-                                        type="text" />
+                                        <Input
+                                            value={nomLogiciel}
+                                            onChange={(e) => setNomLogiciel(e.target.value)}
+                                            type="text" />
                                     </FormGroup>
                                 </Col>
                             </Row>

@@ -27,8 +27,12 @@ const User = () => {
   useEffect(() => {
     axios.get("http://localhost:5000/api/auth/profile")
     .then(response => {
-      console.log("get List ::", response);
-      setData(response.data)
+      console.log("get List ::", response.data);
+      setData(response.data.data)
+      setNom(response.data.data.nom)
+      setMetier(response.data.data.metier)
+      setDescription(response.data.data.description)
+      setAboutDescription(response.data.data.about_description)
  
   })
   .catch(err => console.log(err));

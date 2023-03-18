@@ -16,7 +16,6 @@ import {
     Col,
 } from "reactstrap";
 import ImageUpload from "components/CustomUpload/ImageUpload.js";
-import { DataProfileCV } from "../data/realisation";
 import axios from "axios";
 
 const Description = () => {
@@ -24,39 +23,86 @@ const Description = () => {
     const [nom, setNom] = React.useState("");
     const [metier, setMetier] = React.useState("");
     const [description, setDescription] = React.useState("");
+    const [file, setFile] = useState(null)
+    const [isEmpty, setIsEmpty] = useState(true)
+    const [message, setMessage] = React.useState("");
 
-  useEffect(() => {
-    axios.get("http://localhost:5000/api/realisation/1")
-    .then(response => {
-      console.log("get List ::", response);
-      setData(response.data.data);
-      setNom(response.data.data.nom);
-      setMetier(response.data.data.metier);
-      setDescription(response.data.data.description);
- 
-  })
-  .catch(err => console.log(err));
-  
-  }, [])
+    useEffect( () => {
+        axios.get("http://localhost:5000/api/realisation/getAll")
+            .then(response => {
+                console.log("get List ::", response.data.data.length);
+                if(response.data.data.length > 0)
+                {
+                    setIsEmpty(true)
+                    setData(response.data.data)
+                    setNom(response.data.data.nom);
+                    setMetier(response.data.data.metier);
+                    setDescription(response.data.data.description);
+                }else 
+                {
+                    setIsEmpty(false)
+                    
+                }
+                
 
-  const handleProfil = async (event) => {
-    event.preventDefault();
+            })
+    }, []);
+    
 
-    const RealisationPayload = {
-        nom:nom,
-        metier:metier,
-        description:description,
-        id_User: await localStorage.getItem("id user")
+    async function postImage({ image, nom, metier, description }) {
+        const formData = new FormData();
+
+        formData.append('image', image);
+        formData.append('nom', nom);
+        formData.append('description', description);
+        formData.append('metier', metier);
+
+        // Vérifier si des données existent déjà
+        try {
+            let response;
+            if (isEmpty) {
+                // Les données existent : mettre à jour l'entrée existante
+                response = axios.put("http://localhost:5000/api/realisation/1", 
+                    formData,
+                    { headers: { "Content-Type": "multipart/form-data" } }
+                )
+                    .then(response => {
+                        console.log("test", response);
+                        setMessage(response.data.message)
+                        return response.data.message;
+                    })
+                    .catch(err => console.log(err));
+            }else{
+                // Les données n'existent pas : créer une nouvelle entrée
+                response = axios.post("http://localhost:5000/api/realisation/create",
+                    formData,
+                    { headers: { "Content-Type": "multipart/form-data" } }
+                )
+                    .then(response => {
+                        console.log("cv", response);
+                        setMessage(response.data.message)
+                        return response.data.message;
+                    })
+                    .catch(err => console.log(err));
+            }
+        } catch (error) {
+            console.error(error);
+        }
     }
 
-    axios.put("http://localhost:5000/api/realisation/1", RealisationPayload)
-    .then(response => {
-        console.log("test",response);
-   
-    })
-    .catch(err => console.log(err));
-    
-  };
+    const handleProfil = async (event) => {
+        event.preventDefault();
+
+        const result = await postImage({ image: file, nom, description, metier })
+        return result;
+
+    };
+    const handleImageChange = (file) => {
+        console.log('bonjour::', file)
+        setFile(file)
+    };
+
+    const paragraph = <p style={{ color: 'red', textAlign: 'center' }}>{message}</p>;
 
     return (
         <>
@@ -71,21 +117,21 @@ const Description = () => {
                                 <Col md="12">
                                     <FormGroup>
                                         <label>Nom</label>
-                                        <Input 
-                                        value={nom}
-                                        onChange={(e) => setNom(e.target.value)}
-                                        type="text" />
+                                        <Input
+                                            value={nom}
+                                            onChange={(e) => setNom(e.target.value)}
+                                            type="text" />
                                     </FormGroup>
                                 </Col>
-                                </Row>
-                                <Row>
+                            </Row>
+                            <Row>
                                 <Col md="12">
                                     <FormGroup>
                                         <label>Metier</label>
-                                        <Input 
-                                        value={metier}
-                                        onChange={(e) => setMetier(e.target.value)} 
-                                        type="text" />
+                                        <Input
+                                            value={metier}
+                                            onChange={(e) => setMetier(e.target.value)}
+                                            type="text" />
                                     </FormGroup>
                                 </Col>
                             </Row>
@@ -103,6 +149,8 @@ const Description = () => {
                                     </Col>
                                     <Col>
                                         <ImageUpload
+                                            type="file"
+                                            onChange={handleImageChange}
                                             addBtnColor="default"
                                             changeBtnColor="default"
                                         />
@@ -117,6 +165,7 @@ const Description = () => {
                         </Button>
                     </CardFooter>
                 </Card>
+                {paragraph}
             </div>
         </>
     );

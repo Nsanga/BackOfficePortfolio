@@ -44,6 +44,7 @@ fuzzyTextFilterFn.autoRemove = (val) => !val;
 
 // Our table component
 function Table({ columns, data }) {
+  console.log(data)
   const [numberOfRows, setNumberOfRows] = React.useState(10);
   const [pageSelect, handlePageSelect] = React.useState(0);
   const filterTypes = React.useMemo(
@@ -205,24 +206,23 @@ function Table({ columns, data }) {
             ))}
           </thead>
           <tbody {...getTableBodyProps()} className="rt-tbody">
-            {page.map((row, i) => {
-              prepareRow(row);
+            {data.map((row, i) => {
+              // prepareRow(row);
               return (
-                <tr
-                  {...row.getRowProps()}
-                  className={classnames(
-                    "rt-tr",
-                    { " -odd": i % 2 === 0 },
-                    { " -even": i % 2 === 1 }
-                  )}
-                >
-                  {row.cells.map((cell) => {
-                    return (
-                      <td {...cell.getCellProps()} className="rt-td">
-                        {cell.render("Cell")}
-                      </td>
-                    );
-                  })}
+                <tr  className={classnames(
+                  "rt-tr",
+                  { " -odd": i % 2 === 0 },
+                  { " -even": i % 2 === 1 }
+                )}>
+                    <td className="rt-td">
+                      {row.nom}
+                    </td>
+                    <td className="rt-td">
+                      {row.description?.slice(0, 30)}
+                    </td>
+                    <td className="rt-td">
+                      {row.image?.slice(0, 20)}
+                    </td>
                 </tr>
               );
             })}

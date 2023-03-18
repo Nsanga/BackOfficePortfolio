@@ -1,4 +1,4 @@
-import ImageUpload from "components/CustomUpload/ImageUpload";
+import ImageUploadService from "components/CustomUpload/ImageUploadService";
 import React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -15,41 +15,50 @@ import {
     FormGroup,
     Input
 } from "reactstrap";
-//import ImageUpload from "components/CustomUpload/ImageUpload.js";
+//import ImageUploadService from "components/CustomUpload/ImageUploadService.js";
 
 const AddService = () => {
     const [modalMini, setModalMini] = React.useState(false);
-    const [data, setData] = React.useState([])
+    const [data, setData] = React.useState([]);
     const [nom, setNom] = React.useState("");
     const [description, setDescription] = React.useState("");
-
-    useEffect(() => {
-      axios.get("http://localhost:5000/api/service/getAll")
-      .then(response => {
-        console.log("get List ::", response);
-        setData(response.data)
-   
-    })
-    .catch(err => console.log(err));
+    const [file, setFile] = useState(null)
+    const [message, setMessage] = React.useState("");
     
-    }, [])
-  
+
+    async function postImage({ image, nom, description }) {
+        const formData = new FormData();
+    
+        formData.append('image', image);
+        formData.append('nom', nom);
+        formData.append('description', description);
+
+        axios.post("http://localhost:5000/api/service/create",
+                formData,
+                { headers: { "Content-Type": "multipart/form-data" } }
+            )
+                .then(response => {
+                    console.log("service", response);
+                    console.log("service1:::", formData)
+                    setMessage(response.data.message)
+                    return response.data.message;
+    
+                })
+                .catch(err => console.log(err));
+                
+            
+    }
+
     const handleProfil = async (event) => {
-      event.preventDefault();
-  
-      const profilePayload = {
-        nom: nom,
-        description: description,
-        id_User: await localStorage.getItem("id user")
-      }
-  
-      axios.post("http://localhost:5000/api/service/create", profilePayload)
-      .then(response => {
-          console.log("test",response);
-     
-      })
-      .catch(err => console.log(err));
-      
+        event.preventDefault();
+
+        const result = await postImage({ image: file, nom, description })
+        return result;
+
+    };
+    const handleImageChange = (file) => {
+        console.log('bonjour::', file)
+        setFile(file)
     };
 
     const toggleModalMini = () => {
@@ -65,36 +74,8 @@ const AddService = () => {
     setrequiredState: (value) => setrequiredState(value),
   };
   
-  // function that verifies if a string has a given length or not
-  const verifyLength = (value, length) => {
-    if (value.length >= length) {
-      return true;
-    }
-    return false;
-  };
   
-  const change = (event, stateName, type, stateNameEqualTo, maxValue) => {
-    switch (type) {
-      
-      case "length":
-        if (verifyLength(event.target.value, stateNameEqualTo)) {
-          stateFunctions["set" + stateName + "State"]("has-success");
-        } else {
-          stateFunctions["set" + stateName + "State"]("has-danger");
-        }
-        break;
-      
-      default:
-        break;
-    }
-    stateFunctions["set" + stateName](event.target.value);
-  };
-  
-  const typeClick = () => {
-    if (requiredState === "") {
-      setrequiredState("has-danger");
-    }
-  };
+  const paragraph = <p style={{ color: 'red', textAlign: 'center' }}>{message}</p>;
   
     return (
         <>
@@ -122,13 +103,9 @@ const AddService = () => {
                     <Label sm="2">Nom</Label>
                     <Col sm="7">
                       <FormGroup className={requiredState}>
-                        <Input
-                          value={nom}
-                          onChange={(e) => setNom(e.target.value)}
-                          name="required"
-                          type="text"
-                          //onChange={(e) => change(e, "required", "length", 1)}
-                        />
+                    <Input type="text"
+                      value={nom}
+                      onChange={(e) => setNom(e.target.value)} />
                         {requiredState === "has-danger" ? (
                           <label className="error">
                             This field is required.
@@ -144,14 +121,12 @@ const AddService = () => {
                     <Label sm="2">Description</Label>
                     <Col sm="7">
                       <FormGroup className={requiredState}>
-                        <Input
-                          value={description}
-                          onChange={(e) => setDescription(e.target.value)}
-                          name="required"
-                          type="textarea"
-                          placeholder="Description de la réalisation"
-                          //onChange={(e) => change(e, "required", "length", 1)}
-                        />
+                    <Input
+                      placeholder="Decrivez-vous"
+                      type="textarea"
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                    />
                         {requiredState === "has-danger" ? (
                           <label className="error">
                             This field is required.
@@ -166,10 +141,12 @@ const AddService = () => {
                   <Row>
                     <Label sm="2">Image</Label>
                     <Col sm="7">
-                    <ImageUpload
-                      addBtnColor="default"
-                      changeBtnColor="default"
-                    />
+                  <ImageUploadService
+                    type="file"
+                    onChange={handleImageChange}
+                    addBtnColor="default"
+                    changeBtnColor="default"
+                  />
                     </Col>
                   </Row>
                         <div>
@@ -186,6 +163,7 @@ const AddService = () => {
                             </Button>
                         </div>
                     </Form>
+                    {paragraph}
 
                 </ModalBody>
 

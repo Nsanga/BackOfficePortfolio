@@ -14,8 +14,6 @@ import {
     Row,
     Col,
 } from "reactstrap";
-import { DataExperienceCV } from "../data/realisation";
-import { DataEducationCV } from "../data/realisation";
 import axios from "axios";
 
 const Informations = () => {
@@ -28,10 +26,10 @@ const Informations = () => {
     const [diplome, setDiplome] = React.useState("");
     const [nomEd, setNomEd] = React.useState("");
     const [anneeEd, setAnneeEd] = React.useState("");
-    const [nomRealisation, setNomRealisation] = React.useState("");
     const [nomComptence, setNomComptence] = React.useState("");
     const [descCompetence, setDescCompetence] = React.useState("");
     const [nomLogiciel, setNomLogiciel] = React.useState("");
+    const [message, setMessage] = React.useState("");
 
     function handleInputChange(event) {
         setTache(event.target.value);
@@ -42,6 +40,10 @@ const Informations = () => {
 
         const values = tache.split('\n').map(value => value.trim());
         console.log(values);
+        const valueslogiciel = nomLogiciel.split('\n').map(value => value.trim());
+        console.log(valueslogiciel);
+        const valuesComp = nomComptence.split('\n').map(value => value.trim());
+        console.log(valuesComp);
 
         const experiencePayload = {
             nom: nomEx,
@@ -56,10 +58,6 @@ const Informations = () => {
             annee: anneeEd
         }
 
-        const RealisationPayload = {
-            nom: nomRealisation
-        }
-
         const CompetencePayload = {
             nom: nomComptence,
             description: descCompetence
@@ -69,11 +67,12 @@ const Informations = () => {
             nom: nomLogiciel
         }
 
-        if(experiencePayload.nom != "" || experiencePayload.poste != "" || experiencePayload.annee != "" || experiencePayload.tache != "")
-        {
+        if (experiencePayload.nom != "" || experiencePayload.poste != "" || experiencePayload.annee != "" || experiencePayload.tache != "") {
             axios.post("http://localhost:5000/api/experience/create", experiencePayload)
                 .then(response => {
                     console.log("test", response);
+                    setMessage(response.data.message)
+                    return response.data.message;
 
                 })
                 .catch(err => console.log(err));
@@ -83,15 +82,8 @@ const Informations = () => {
             axios.post("http://localhost:5000/api/education/create", educationPayload)
                 .then(response => {
                     console.log("test", response);
-
-                })
-                .catch(err => console.log(err));
-        }
-
-        if (RealisationPayload.nom != "") {
-            axios.post("http://localhost:5000/api/realisation/create", RealisationPayload)
-                .then(response => {
-                    console.log("test", response);
+                    setMessage(response.data.message)
+                    return response.data.message;
 
                 })
                 .catch(err => console.log(err));
@@ -101,6 +93,8 @@ const Informations = () => {
             axios.post("http://localhost:5000/api/competence/create", CompetencePayload)
                 .then(response => {
                     console.log("test", response);
+                    setMessage(response.data.message)
+                    return response.data.message;
 
                 })
                 .catch(err => console.log(err));
@@ -110,12 +104,15 @@ const Informations = () => {
             axios.post("http://localhost:5000/api/logiciel/create", LogicielPayload)
                 .then(response => {
                     console.log("test", response);
+                    setMessage(response.data.message)
+                    return response.data.message;
 
                 })
                 .catch(err => console.log(err));
         }
 
     };
+    const paragraph = <p style={{ color: 'red', textAlign: 'center' }}>{message}</p>;
 
     return (
         <>
@@ -222,26 +219,6 @@ const Informations = () => {
                     </CardBody>
 
                     <CardHeader>
-                        <h2 className="title">Réalisations</h2>
-                    </CardHeader>
-                    <CardBody>
-                        <Form>
-                            <Row>
-                                <Col md="12">
-                                    <FormGroup>
-                                        <label>Nom</label>
-                                        <Input
-                                            value={nomRealisation}
-                                            onChange={(e) => setNomRealisation(e.target.value)}
-                                            type="text" />
-                                    </FormGroup>
-                                </Col>
-                            </Row>
-
-                        </Form>
-                    </CardBody>
-
-                    <CardHeader>
                         <h2 className="title">Competences</h2>
                     </CardHeader>
                     <CardBody>
@@ -253,7 +230,9 @@ const Informations = () => {
                                         <Input
                                             value={nomComptence}
                                             onChange={(e) => setNomComptence(e.target.value)}
-                                            type="text" />
+                                            id="multiLineInput"
+                                            placeholder="Entrer vos competences"
+                                            type="textarea" />
                                     </FormGroup>
                                 </Col>
                             </Row>
@@ -283,7 +262,9 @@ const Informations = () => {
                                         <Input
                                             value={nomLogiciel}
                                             onChange={(e) => setNomLogiciel(e.target.value)}
-                                            type="text" />
+                                            id="multiLineInput"
+                                            placeholder="Entrer vos logiciels ou applications"
+                                            type="textarea" />
                                     </FormGroup>
                                 </Col>
                             </Row>
@@ -295,6 +276,7 @@ const Informations = () => {
                         </Button>
                     </CardFooter>
                 </Card>
+                {paragraph}
             </div>
         </>
     );

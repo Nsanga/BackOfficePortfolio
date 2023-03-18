@@ -28,33 +28,33 @@ const Projets = () => {
       }
       tableauValeurs.push(valeursObjet);
     }
-    setDataProject(tableauValeurs);
+    // setDataProject(tableauValeurs);
     return tableauValeurs;
   }
 
   useEffect(async () => {
     const newData = await getListProject();
-    await  setDataProject([...dataProject, newData]);
-
-    console.log("newData:", dataProject);
-    console.log("newData: 22",dataR)
+    console.log("newData:",newData)
 
   }, []);
 
   const getListProject = async () => {
     const response = await axios.get("http://localhost:5000/api/projet/getAll")
     const newData = transformDataProject(response.data.data);
+    setDataProject(response.data.data)
+    // setDataProject(newData)
     return newData;
   }
 
   const [data, setData] = React.useState(
-    dataR?.map((prop, key) => {
+    dataProject?.map((prop, key) => {
       return {
         id: key,
         nom: prop[0],
         image: prop[1],
         description: prop[2],
         type: prop[3],
+        lien: prop[4],
         actions: (
           // we've added some custom button actions
           <div className="actions-right">
@@ -123,10 +123,10 @@ const Projets = () => {
               </CardHeader>
               <CardBody>
 
-                <Add></Add>
+              <Add setData={setData} />
 
                 <ProjectTable
-                  data={data}
+                  data={dataProject}
                   filterable
                   resizable={false}
                   columns={[
@@ -147,16 +147,8 @@ const Projets = () => {
                       accessor: "type",
                     },
                     {
-                      Header: "Action1",
-                      accessor: "action1"
-                    },
-                    {
-                      Header: "Action2",
-                      accessor: "action2"
-                    },
-                    {
-                      Header: "Action3",
-                      accessor: "action3"
+                      Header: "Lien",
+                      accessor: "lien",
                     },
                     {
                       Header: "Actions",

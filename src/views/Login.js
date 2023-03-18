@@ -1,5 +1,4 @@
 import React from "react";
-import { Route, Switch, Redirect, Link } from "react-router-dom";
 import classnames from "classnames";
 // reactstrap components
 import {

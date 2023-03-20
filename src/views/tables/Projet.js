@@ -39,7 +39,7 @@ const Projets = () => {
   }, []);
 
   const getListProject = async () => {
-    const response = await axios.get("http://localhost:5000/api/projet/getAll")
+    const response = await axios.get("http://localhost:7000/api/projet/getAll")
     const newData = transformDataProject(response.data.data);
     setDataProject(response.data.data)
     // setDataProject(newData)

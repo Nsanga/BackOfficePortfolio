@@ -35,7 +35,7 @@ const Login = () => {
       password: password
     }
 
-    axios.post("http://localhost:5000/api/auth/login", loginPayload)
+    axios.post("http://localhost:7000/api/auth/login", loginPayload)
     .then(response => {
         const token  =  response.data.token;
         console.log(response);

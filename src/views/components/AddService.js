@@ -33,7 +33,7 @@ const AddService = () => {
         formData.append('nom', nom);
         formData.append('description', description);
 
-        axios.post("http://localhost:5000/api/service/create",
+        axios.post("http://localhost:7000/api/service/create",
                 formData,
                 { headers: { "Content-Type": "multipart/form-data" } }
             )

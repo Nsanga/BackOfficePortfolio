@@ -34,7 +34,7 @@ const User = () => {
   }
 
   useEffect(() => {
-    axios.get("http://localhost:5000/api/auth/profile")
+    axios.get("http://localhost:7000/api/auth/profile")
       .then(response => {
         console.log("get List1 ::", response.data);
         setData(response.data.data)
@@ -67,7 +67,7 @@ const User = () => {
 
     try {
       if (formData.nom != "" || formData.metier != "" || formData.description != "" || formData.about_description != "" || formData.desc_realisation != "") {
-        const response = await axios.put(`http://localhost:5000/api/auth/update/${userId}`, formData, {
+        const response = await axios.put(`http://localhost:7000/api/auth/update/${userId}`, formData, {
           headers: { "Content-Type": "multipart/form-data" }
         });
         console.log("list", response);

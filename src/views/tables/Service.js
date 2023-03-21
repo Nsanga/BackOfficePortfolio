@@ -12,6 +12,7 @@ import {
 import AddService from "views/components/AddService";
 import ServiceTable from "components/ReactTable/ServiceTable.js";
 import axios from "axios";
+import {url} from "../../urlLoader";
 import { Data } from "../data/realisation.js";
 
 
@@ -39,7 +40,7 @@ const Projets = () => {
   }, []);
 
   const getListService = async () => {
-    const response = await axios.get("http://localhost:7000/api/service/getAll")
+    const response = await axios.get(`${url}/api/service/getAll`)
     const newData = transformDataProject(response.data.data);
     setDataService(response.data.data)
     // setDataService(newData)

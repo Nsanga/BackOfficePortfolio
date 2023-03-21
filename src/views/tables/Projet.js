@@ -12,6 +12,7 @@ import {
 import Add from "views/components/Add";
 import ProjectTable from "components/ReactTable/ProjectTable.js";
 import axios from "axios";
+import { url } from "../../urlLoader";
 import { Data } from "../data/realisation.js";
 
 
@@ -39,7 +40,7 @@ const Projets = () => {
   }, []);
 
   const getListProject = async () => {
-    const response = await axios.get("http://localhost:7000/api/projet/getAll")
+    const response = await axios.get(`${url}/api/projet/getAll`)
     const newData = transformDataProject(response.data.data);
     setDataProject(response.data.data)
     // setDataProject(newData)

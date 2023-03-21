@@ -15,7 +15,7 @@ import {
     FormGroup,
     Input
 } from "reactstrap";
-//import ImageUploadService from "components/CustomUpload/ImageUploadService.js";
+import {url} from "../../urlLoader"
 
 const AddService = () => {
     const [modalMini, setModalMini] = React.useState(false);
@@ -33,7 +33,7 @@ const AddService = () => {
         formData.append('nom', nom);
         formData.append('description', description);
 
-        axios.post("http://localhost:7000/api/service/create",
+        axios.post(`${url}/api/service/create`,
                 formData,
                 { headers: { "Content-Type": "multipart/form-data" } }
             )

@@ -19,6 +19,7 @@ import {
 
 import {setAuthToken} from "./components/setAuthToken";
 import axios from "axios";
+import {url} from "../urlLoader"
 
 const Login = () => {
   const [state, setState] = React.useState({});
@@ -35,7 +36,7 @@ const Login = () => {
       password: password
     }
 
-    axios.post("http://localhost:7000/api/auth/login", loginPayload)
+    axios.post(`${url}/api/auth/login`, loginPayload)
     .then(response => {
         const token  =  response.data.token;
         console.log(response);

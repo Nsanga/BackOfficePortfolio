@@ -15,6 +15,7 @@ import {
     Input
 } from "reactstrap";
 import axios from "axios";
+import {url} from "../../urlLoader"
 
 
 const Add = () => {
@@ -41,7 +42,7 @@ const Add = () => {
           formData.append('type', type);
           formData.append('lien', lien);
     
-          axios.post("http://localhost:7000/api/projet/create", 
+          axios.post(`${url}/api/projet/create`, 
             formData,
             {headers: { "Content-Type": "multipart/form-data" }}
           )

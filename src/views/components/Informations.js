@@ -15,6 +15,7 @@ import {
     Col,
 } from "reactstrap";
 import axios from "axios";
+import {url} from "../../urlLoader"
 
 const Informations = () => {
 
@@ -68,7 +69,7 @@ const Informations = () => {
         }
 
         if (experiencePayload.nom != "" || experiencePayload.poste != "" || experiencePayload.annee != "" || experiencePayload.tache != "") {
-            axios.post("http://localhost:7000/api/experience/create", experiencePayload)
+            axios.post(`${url}/api/experience/create`, experiencePayload)
                 .then(response => {
                     console.log("test", response);
                     setMessage(response.data.message)
@@ -79,7 +80,7 @@ const Informations = () => {
         }
 
         if (educationPayload.nom != "" || educationPayload.annee != "" || educationPayload.diplome != "") {
-            axios.post("http://localhost:7000/api/education/create", educationPayload)
+            axios.post(`${url}/api/education/create`, educationPayload)
                 .then(response => {
                     console.log("test", response);
                     setMessage(response.data.message)
@@ -90,7 +91,7 @@ const Informations = () => {
         }
 
         if (CompetencePayload.nom != "" || CompetencePayload.description != "") {
-            axios.post("http://localhost:7000/api/competence/create", CompetencePayload)
+            axios.post(`${url}/api/competence/create`, CompetencePayload)
                 .then(response => {
                     console.log("test", response);
                     setMessage(response.data.message)
@@ -101,7 +102,7 @@ const Informations = () => {
         }
 
         if (LogicielPayload.nom != "") {
-            axios.post("http://localhost:7000/api/logiciel/create", LogicielPayload)
+            axios.post(`${url}/api/logiciel/create`, LogicielPayload)
                 .then(response => {
                     console.log("test", response);
                     setMessage(response.data.message)
